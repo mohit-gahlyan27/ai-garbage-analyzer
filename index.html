@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Garbage Analyzer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<!-- Lottie Script -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+scroll-behavior:smooth;
+}
+
+body{
+background:linear-gradient(135deg,#0f0f0f,#1c1c1c);
+color:white;
+}
+
+/* Navbar */
+.navbar{
+display:flex;
+justify-content:space-between;
+padding:20px 50px;
+background:rgba(0,0,0,0.7);
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.logo{
+font-size:22px;
+font-weight:600;
+color:#ff3b3b;
+}
+
+.nav-links a{
+margin-left:25px;
+text-decoration:none;
+color:#ddd;
+transition:0.3s;
+}
+
+.nav-links a:hover{
+color:#ff3b3b;
+}
+
+/* Sections */
+section{
+padding:80px 20px;
+text-align:center;
+}
+
+h1{
+color:#ff3b3b;
+margin-bottom:10px;
+}
+
+p{
+color:#bbb;
+max-width:700px;
+margin:auto;
+}
+
+/* ✅ HERO CENTER FIX */
+#home{
+min-height:90vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.hero-flex{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+margin-top:30px;
+}
+
+.hero-text{
+max-width:600px;
+text-align:center;
+}
+
+/* Lottie */
+lottie-player{
+width:220px;
+height:220px;
+margin-top:20px;
+}
+
+/* Container */
+.container{
+width:420px;
+margin:30px auto;
+padding:30px;
+background:rgba(255,255,255,0.05);
+border-radius:15px;
+backdrop-filter:blur(10px);
+box-shadow:0 0 30px rgba(255,0,0,0.2);
+}
+
+/* Upload */
+.file-upload{
+display:block;
+background:#222;
+padding:15px;
+border-radius:8px;
+cursor:pointer;
+margin-bottom:10px;
+}
+
+.file-upload input{
+display:none;
+}
+
+/* Button */
+button{
+width:100%;
+padding:12px;
+background:linear-gradient(45deg,#ff3b3b,#ff6b6b);
+border:none;
+color:white;
+border-radius:8px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+/* Image */
+img{
+width:100%;
+margin-top:15px;
+border-radius:10px;
+}
+
+/* Results */
+.result-box{
+background:#111;
+padding:15px;
+margin-top:15px;
+border-radius:10px;
+border-left:4px solid #ff3b3b;
+transition:0.3s;
+}
+
+.result-box:hover{
+transform:translateY(-5px);
+}
+
+/* Lists */
+ul, ol{
+margin-top:15px;
+color:#ccc;
+}
+
+li{
+margin:8px 0;
+}
+
+/* Footer */
+.footer{
+text-align:center;
+padding:20px;
+color:#777;
+border-top:1px solid #222;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+<div class="logo">AI Garbage Analyzer</div>
+<div class="nav-links">
+<a href="#home">Home</a>
+<a href="#about">About</a>
+<a href="#project">Project</a>
+</div>
+</div>
+
+<!-- HOME -->
+<section id="home">
+
+<div class="hero-flex">
+
+<div class="hero-text">
+<h1>Smart Garbage Detection</h1>
+
+<p>
+Upload an image and our AI will detect garbage items and suggest recycling methods.
+</p>
+
+<p style="margin-top:10px;">
+♻️ Smart waste detection | 🤖 AI powered | 🌱 Eco-friendly solutions
+</p>
+</div>
+
+<!-- Lottie Animation -->
+<lottie-player 
+src="https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json"
+background="transparent"
+speed="1"
+loop
+autoplay>
+</lottie-player>
+
+</div>
+
+<div class="container">
+
+<form action="/predict" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
+
+<label class="file-upload">
+📁 Choose Image
+<input type="file" name="file" onchange="previewImage(event)" required>
+</label>
+
+<img id="preview" style="display:none;">
+
+<button type="submit">🚀 Analyze Image</button>
+
+</form>
+
+<div id="loader" style="display:none; margin-top:10px;">
+<p>Analyzing image...</p>
+</div>
+
+{% if filename %}
+<h3>Uploaded Image</h3>
+<img src="{{ url_for('static', filename='uploads/' + filename) }}">
+{% endif %}
+
+{% if objects %}
+<h3>Detected Objects</h3>
+{% for obj in objects %}
+<div class="result-box">
+<p>🧠 <b>{{ obj.name }}</b></p>
+<p>♻️ {{ obj.category }}</p>
+<p>💡 {{ obj.suggestion }}</p>
+</div>
+{% endfor %}
+{% endif %}
+
+</div>
+
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+
+<h1>About Project</h1>
+
+<p>
+This project uses Artificial Intelligence to detect garbage items from images.
+It helps users identify waste categories like plastic, metal, or organic and
+suggests proper recycling methods.
+</p>
+
+<ul>
+<li>Technology Used: Python, Flask, Machine Learning</li>
+<li>Model Type: Image Classification / Object Detection</li>
+<li>Goal: Promote clean and sustainable environment</li>
+</ul>
+
+</section>
+
+<!-- PROJECT -->
+<section id="project">
+
+<h1>Project Details</h1>
+
+<p>
+This project is developed as a <b>Final Year BCA Project</b>. It demonstrates the practical
+implementation of Artificial Intelligence and Web Development concepts to solve real-world problems.
+</p>
+
+<br>
+
+<h3>How It Works:</h3>
+<ol>
+<li>User uploads an image</li>
+<li>AI analyzes the image</li>
+<li>Garbage type is detected</li>
+<li>Recycling suggestions are provided</li>
+</ol>
+
+<br>
+
+<h3>How It Helps:</h3>
+<ul>
+<li>Promotes proper waste segregation</li>
+<li>Helps people understand recycling methods</li>
+<li>Supports smart city initiatives</li>
+<li>Reduces environmental pollution</li>
+</ul>
+
+<br>
+
+<h3>Where It Can Be Used:</h3>
+<ul>
+<li>Smart dustbins 🤖</li>
+<li>Municipal waste systems 🏙️</li>
+<li>Educational tools 📚</li>
+<li>Recycling industries ♻️</li>
+</ul>
+
+</section>
+
+<!-- Footer -->
+<div class="footer">
+© 2026 AI Garbage Analyzer | Final Year BCA Project <br>
+mohit (23052338)
+</div>
+
+<script>
+
+function previewImage(event){
+let img = document.getElementById("preview");
+img.src = URL.createObjectURL(event.target.files[0]);
+img.style.display = "block";
+}
+
+function showLoader(){
+document.getElementById("loader").style.display = "block";
+}
+
+</script>
+
+</body>
+</html>
